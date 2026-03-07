@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Estoque</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+<header>
+    <h1>Sistema de controle de Estoque</h1>
+</header>
+
+<Section class="formulario">
+
+    <input type="text" id="nomeProduto" placeholder="Nome do produto">
+
+    <input type="text" id="codigoProduto" placeholder="Código do Produto">
+
+    <input type="text" id="quantidadeProduto" placeholder="Quantidade do Produto">
+
+    <input type="text" id="estoqueMinimo" placeholder="Estoque mínimo
+    ">
+
+    <input type="text" id="estoqueEmergencia" placeholder="Estoque Emergencia
+    ">
+    <button onclick="cadastrarProduto()">Cadastrar Produto</button>
+
+
+
+</Section>
+
+<section class="tabela">
+
+<h2>Lista de Produtos</h2>
+
+<table>
+
+<thead>
+
+<tr>
+<th>Nome</th>
+<th>Código</th>
+<th>Quantidade</th>
+<th>Status</th>
+</tr>
+
+</thead>
+
+<tbody id="listaProdutos">
+
+</tbody>
+
+</table>
+
+</section>
+
+<script src="script.js"></script>
+
+</body>
+</html>
