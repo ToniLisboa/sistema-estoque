@@ -1,52 +1,54 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Estoque</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="estilo/style.css">
+<title>Sistema de Estoque</title>
+
+<link rel="stylesheet" href="style.css">
+
 </head>
 
 <body>
+
 <header>
-    <h1>Sistema de controle de Estoque</h1>
+<h1>📦 Sistema de Controle de Estoque</h1>
 </header>
 
-<Section class="formulario">
+<main>
 
-    <input type="text" id="nomeProduto" placeholder="Nome do produto">
+<section class="form-container">
 
-    <input type="text" id="codigoProduto" placeholder="Código do Produto">
+<h2>Cadastro de Produto</h2>
 
-    <input type="text" id="quantidadeProduto" placeholder="Quantidade do Produto">
+<input type="text" id="nome" placeholder="Nome do produto">
 
-    <input type="text" id="estoqueMinimo" placeholder="Estoque mínimo
-    ">
+<input type="number" id="quantidade" placeholder="Quantidade">
 
-    <input type="text" id="estoqueEmergencia" placeholder="Estoque Emergencia
-    ">
-    <button onclick="cadastrarProduto()">Cadastrar Produto</button>
+<input type="number" id="minimo" placeholder="Estoque mínimo">
+
+<input type="number" id="emergencia" placeholder="Estoque de emergência">
+
+<button onclick="adicionarProduto()">Adicionar Produto</button>
+
+</section>
 
 
+<section class="estoque-container">
 
-</Section>
-
-<section class="tabela">
-
-<h2>Lista de Produtos</h2>
+<h2>Produtos no Estoque</h2>
 
 <table>
 
 <thead>
-
 <tr>
-<th>Nome</th>
-<th>Código</th>
+<th>Produto</th>
 <th>Quantidade</th>
-<th>Status</th>
+<th>Mínimo</th>
+<th>Emergência</th>
+<th>Ações</th>
 </tr>
-
 </thead>
 
 <tbody id="listaProdutos">
@@ -56,6 +58,8 @@
 </table>
 
 </section>
+
+</main>
 
 <script src="script.js"></script>
 
