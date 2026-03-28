@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Relatorios | Sistema de Estoque</title>
+<link rel="stylesheet" href="estilo/style.css">
+</head>
+<body>
+<header class="topo">
+<div class="topo-conteudo">
+<div>
+<p class="etiqueta">Analise</p>
+<h1>Relatorios do estoque</h1>
+<p class="subtitulo">Consulte indicadores essenciais para compras, reposicao e acompanhamento diario.</p>
+</div>
+<nav class="menu">
+<a class="menu-link" href="index.html">Painel</a>
+<a class="menu-link" href="cadastro.html">Cadastro</a>
+<a class="menu-link" href="estoque.html">Estoque</a>
+<a class="menu-link" href="movimentacoes.html">Movimentacoes</a>
+<a class="menu-link ativo" href="relatorios.html">Relatorios</a>
+</nav>
+</div>
+</header>
+
+<main class="layout">
+<section class="cards-resumo">
+<article class="card mini-card">
+<span>Produtos cadastrados</span>
+<strong id="relatorioTotalProdutos">0</strong>
+</article>
+<article class="card mini-card">
+<span>Estoque normal</span>
+<strong id="relatorioNormais">0</strong>
+</article>
+<article class="card mini-card">
+<span>Precisam atencao</span>
+<strong id="relatorioAlertas">0</strong>
+</article>
+<article class="card mini-card">
+<span>Nivel emergencial</span>
+<strong id="relatorioEmergencias">0</strong>
+</article>
+</section>
+
+<section class="grid-duplo">
+<article class="card">
+<div class="secao-topo">
+<h2>Reposicao recomendada</h2>
+</div>
+<div id="listaReposicao" class="lista-vazia">Nenhum item precisa de reposicao.</div>
+</article>
+
+<article class="card">
+<div class="secao-topo">
+<h2>Resumo operacional</h2>
+</div>
+<div id="resumoOperacional" class="resumo-texto"></div>
+</article>
+</section>
+</main>
+
+<script src="script.js"></script>
+</body>
+</html>

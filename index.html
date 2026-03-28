@@ -1,70 +1,92 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Sistema de Estoque</title>
-
+<title>Painel | Sistema de Estoque</title>
 <link rel="stylesheet" href="estilo/style.css">
-
 </head>
-
 <body>
-
-<header>
-<h1>📦 Sistema de Controle de Estoque</h1>
+<header class="topo">
+<div class="topo-conteudo">
+<div>
+<p class="etiqueta">Gestao inteligente</p>
+<h1>Sistema de Controle de Estoque</h1>
+<p class="subtitulo">Acompanhe produtos, niveis criticos e movimentacoes em um so lugar.</p>
+</div>
+<nav class="menu">
+<a class="menu-link ativo" href="index.html">Painel</a>
+<a class="menu-link" href="cadastro.html">Cadastro</a>
+<a class="menu-link" href="estoque.html">Estoque</a>
+<a class="menu-link" href="movimentacoes.html">Movimentacoes</a>
+<a class="menu-link" href="relatorios.html">Relatorios</a>
+</nav>
+</div>
 </header>
 
-<main>
-
-<section class="form-container">
-
-<h2>Cadastro de Produto</h2>
-
-<input type="text" id="codigo" placeholder="Codigo do produto">
-
-<input type="text" id="nome" placeholder="Nome do produto">
-
-<input type="number" id="quantidade" placeholder="Quantidade">
-
-<input type="number" id="minimo" placeholder="Estoque mínimo">
-
-<input type="number" id="emergencia" placeholder="Estoque de emergência">
-
-<button onclick="adicionarProduto()">Adicionar Produto</button>
-
+<main class="layout">
+<section class="card destaque">
+<div>
+<p class="etiqueta">Visao geral</p>
+<h2>Painel do estoque</h2>
+<p>Use os atalhos abaixo para cadastrar produtos, acompanhar alertas e consultar o resumo operacional.</p>
+</div>
+<div class="acoes-rapidas">
+<a class="botao-link" href="cadastro.html">Cadastrar produto</a>
+<a class="botao-link secundario" href="estoque.html">Ver estoque</a>
+</div>
 </section>
 
-
-<section class="estoque-container">
-
-<h2>Produtos no Estoque</h2>
-
-<table>
-
-<thead>
-<tr>
-<th>Codigo</th>
-<th>Produto</th>
-<th>Quantidade</th>
-<th>Mínimo</th>
-<th>Emergência</th>
-<th>Ações</th>
-</tr>
-</thead>
-
-<tbody id="listaProdutos">
-
-</tbody>
-
-</table>
-
+<section class="cards-resumo">
+<article class="card mini-card">
+<span>Total de produtos</span>
+<strong id="totalProdutos">0</strong>
+</article>
+<article class="card mini-card">
+<span>Estoque baixo</span>
+<strong id="totalAlertas">0</strong>
+</article>
+<article class="card mini-card">
+<span>Emergencia</span>
+<strong id="totalEmergencias">0</strong>
+</article>
+<article class="card mini-card">
+<span>Itens disponiveis</span>
+<strong id="totalItens">0</strong>
+</article>
 </section>
 
+<section class="grid-duplo">
+<article class="card">
+<div class="secao-topo">
+<h2>Atalhos</h2>
+</div>
+<div class="atalhos">
+<a class="atalho-card" href="cadastro.html">
+<h3>Novo cadastro</h3>
+<p>Registre produtos com codigo, quantidade minima e nivel de emergencia.</p>
+</a>
+<a class="atalho-card" href="movimentacoes.html">
+<h3>Movimentar estoque</h3>
+<p>Realize entradas e saidas sem precisar localizar o item manualmente em tabelas longas.</p>
+</a>
+<a class="atalho-card" href="relatorios.html">
+<h3>Relatorios</h3>
+<p>Visualize indicadores rapidos para apoiar decisoes de reposicao e compra.</p>
+</a>
+</div>
+</article>
+
+<article class="card">
+<div class="secao-topo">
+<h2>Produtos criticos</h2>
+<span class="contador" id="contadorCriticos">0 itens</span>
+</div>
+<div id="listaCriticos" class="lista-vazia">Nenhum produto critico no momento.</div>
+</article>
+</section>
 </main>
 
 <script src="script.js"></script>
-
 </body>
 </html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Estoque | Sistema de Estoque</title>
+<link rel="stylesheet" href="estilo/style.css">
+</head>
+<body>
+<header class="topo">
+<div class="topo-conteudo">
+<div>
+<p class="etiqueta">Consulta</p>
+<h1>Produtos em estoque</h1>
+<p class="subtitulo">Acompanhe quantidades, limites de seguranca e status de cada item cadastrado.</p>
+</div>
+<nav class="menu">
+<a class="menu-link" href="index.html">Painel</a>
+<a class="menu-link" href="cadastro.html">Cadastro</a>
+<a class="menu-link ativo" href="estoque.html">Estoque</a>
+<a class="menu-link" href="movimentacoes.html">Movimentacoes</a>
+<a class="menu-link" href="relatorios.html">Relatorios</a>
+</nav>
+</div>
+</header>
+
+<main class="layout">
+<section class="card">
+<div class="secao-topo">
+<h2>Lista de produtos</h2>
+<span class="contador" id="contadorEstoque">0 itens</span>
+</div>
+
+<div class="tabela-wrap">
+<table>
+<thead>
+<tr>
+<th>Codigo</th>
+<th>Produto</th>
+<th>Quantidade</th>
+<th>Minimo</th>
+<th>Emergencia</th>
+<th>Status</th>
+<th>Acoes</th>
+</tr>
+</thead>
+<tbody id="listaProdutos"></tbody>
+</table>
+</div>
+</section>
+</main>
+
+<script src="script.js"></script>
+</body>
+</html>
