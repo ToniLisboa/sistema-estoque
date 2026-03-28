@@ -1,13 +1,12 @@
 const STORAGE_KEY = "sistema-estoque-produtos";
+const REQ_STORAGE_KEY = "sistema-estoque-requisicoes";
 
 let produtos = carregarProdutos();
+let requisicoes = carregarRequisicoes();
 
 function carregarProdutos() {
   const dados = localStorage.getItem(STORAGE_KEY);
-
-  if (!dados) {
-    return [];
-  }
+  if (!dados) return [];
 
   try {
     return JSON.parse(dados);
@@ -17,40 +16,41 @@ function carregarProdutos() {
   }
 }
 
+function carregarRequisicoes() {
+  const dados = localStorage.getItem(REQ_STORAGE_KEY);
+  if (!dados) return [];
+
+  try {
+    return JSON.parse(dados);
+  } catch (error) {
+    console.error("Erro ao carregar requisicoes:", error);
+    return [];
+  }
+}
+
 function salvarProdutos() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(produtos));
 }
 
+function salvarRequisicoes() {
+  localStorage.setItem(REQ_STORAGE_KEY, JSON.stringify(requisicoes));
+}
+
 function obterStatus(produto) {
-  if (produto.quantidade <= produto.emergencia) {
-    return "emergencia";
-  }
-
-  if (produto.quantidade <= produto.minimo) {
-    return "alerta";
-  }
-
+  if (produto.quantidade <= produto.emergencia) return "emergencia";
+  if (produto.quantidade <= produto.minimo) return "alerta";
   return "normal";
 }
 
 function obterTextoStatus(produto) {
   const status = obterStatus(produto);
-
-  if (status === "emergencia") {
-    return "Emergencia";
-  }
-
-  if (status === "alerta") {
-    return "Atencao";
-  }
-
+  if (status === "emergencia") return "Emergencia";
+  if (status === "alerta") return "Atencao";
   return "Normal";
 }
 
 function adicionarProduto(event) {
-  if (event) {
-    event.preventDefault();
-  }
+  if (event) event.preventDefault();
 
   const codigo = document.getElementById("codigo").value.trim();
   const nome = document.getElementById("nome").value.trim();
@@ -59,75 +59,96 @@ function adicionarProduto(event) {
   const emergencia = Number(document.getElementById("emergencia").value);
 
   if (!codigo || !nome || Number.isNaN(quantidade) || Number.isNaN(minimo) || Number.isNaN(emergencia)) {
-    mostrarMensagem("Preencha todos os campos corretamente.", true);
+    mostrarMensagem("mensagemCadastro", "Preencha todos os campos corretamente.", true);
     return;
   }
 
   if (emergencia > minimo) {
-    mostrarMensagem("O estoque de emergencia nao pode ser maior que o estoque minimo.", true);
+    mostrarMensagem("mensagemCadastro", "O estoque de emergencia nao pode ser maior que o estoque minimo.", true);
     return;
   }
 
   const codigoJaExiste = produtos.some((produto) => produto.codigo.toLowerCase() === codigo.toLowerCase());
 
   if (codigoJaExiste) {
-    mostrarMensagem("Ja existe um produto cadastrado com esse codigo.", true);
+    mostrarMensagem("mensagemCadastro", "Ja existe um produto cadastrado com esse codigo.", true);
     return;
   }
 
-  produtos.push({
-    codigo,
-    nome,
-    quantidade,
-    minimo,
-    emergencia
-  });
-
+  produtos.push({ codigo, nome, quantidade, minimo, emergencia });
   salvarProdutos();
-  limparCampos();
-  mostrarMensagem("Produto cadastrado com sucesso.", false);
+  limparCampos("formCadastro");
+  mostrarMensagem("mensagemCadastro", "Produto cadastrado com sucesso.", false);
   renderizarTudo();
 }
 
-function mostrarMensagem(texto, erro) {
-  const mensagem = document.getElementById("mensagemCadastro");
+function registrarRequisicao(event) {
+  event.preventDefault();
 
-  if (!mensagem) {
+  const responsavel = document.getElementById("responsavel").value.trim();
+  const produtoIndex = Number(document.getElementById("produtoRequisicao").value);
+  const quantidade = Number(document.getElementById("quantidadeRequisicao").value);
+  const setor = document.getElementById("setorRequisicao").value.trim();
+
+  if (!responsavel || Number.isNaN(produtoIndex) || Number.isNaN(quantidade) || !setor || quantidade <= 0) {
+    mostrarMensagem("mensagemRequisicao", "Preencha os dados da requisicao corretamente.", true);
     return;
   }
+
+  const produto = produtos[produtoIndex];
+
+  if (!produto) {
+    mostrarMensagem("mensagemRequisicao", "Produto invalido.", true);
+    return;
+  }
+
+  if (quantidade > produto.quantidade) {
+    mostrarMensagem("mensagemRequisicao", "Quantidade solicitada maior que o estoque disponivel.", true);
+    return;
+  }
+
+  produto.quantidade -= quantidade;
+
+  requisicoes.unshift({
+    data: new Date().toLocaleString("pt-BR"),
+    responsavel,
+    produto: produto.nome,
+    codigo: produto.codigo,
+    quantidade,
+    setor
+  });
+
+  salvarProdutos();
+  salvarRequisicoes();
+  limparCampos("formRequisicao");
+  mostrarMensagem("mensagemRequisicao", "Requisicao registrada com sucesso.", false);
+  renderizarTudo();
+}
+
+function mostrarMensagem(id, texto, erro) {
+  const mensagem = document.getElementById(id);
+  if (!mensagem) return;
 
   mensagem.textContent = texto;
   mensagem.className = erro ? "mensagem erro" : "mensagem sucesso";
 }
 
-function limparCampos() {
-  const form = document.getElementById("formCadastro");
-
-  if (form) {
-    form.reset();
-  }
+function limparCampos(formId) {
+  const form = document.getElementById(formId);
+  if (form) form.reset();
 }
 
 function renderizarEstoque() {
   const tabela = document.getElementById("listaProdutos");
   const contador = document.getElementById("contadorEstoque");
 
-  if (!tabela) {
-    return;
-  }
+  if (!tabela) return;
 
   tabela.innerHTML = "";
-
-  if (contador) {
-    contador.textContent = `${produtos.length} itens`;
-  }
+  if (contador) contador.textContent = `${produtos.length} itens`;
 
   if (produtos.length === 0) {
-    tabela.innerHTML = `
-      <tr>
-        <td colspan="7" class="lista-vazia">Nenhum produto cadastrado.</td>
-      </tr>
-    `;
+    tabela.innerHTML = `<tr><td colspan="7" class="lista-vazia">Nenhum produto cadastrado.</td></tr>`;
     return;
   }
 
@@ -154,10 +175,7 @@ function renderizarEstoque() {
 
 function renderizarMovimentacoes() {
   const container = document.getElementById("listaMovimentacoes");
-
-  if (!container) {
-    return;
-  }
+  if (!container) return;
 
   if (produtos.length === 0) {
     container.innerHTML = `<div class="lista-vazia">Cadastre produtos para movimentar o estoque.</div>`;
@@ -188,9 +206,7 @@ function renderizarPainel() {
   const contadorCriticos = document.getElementById("contadorCriticos");
   const listaCriticos = document.getElementById("listaCriticos");
 
-  if (!totalProdutos) {
-    return;
-  }
+  if (!totalProdutos) return;
 
   const alertas = produtos.filter((produto) => obterStatus(produto) === "alerta");
   const emergencias = produtos.filter((produto) => obterStatus(produto) === "emergencia");
@@ -206,9 +222,7 @@ function renderizarPainel() {
     contadorCriticos.textContent = `${criticos.length} itens`;
   }
 
-  if (!listaCriticos) {
-    return;
-  }
+  if (!listaCriticos) return;
 
   if (criticos.length === 0) {
     listaCriticos.innerHTML = `<div class="lista-vazia">Nenhum produto critico no momento.</div>`;
@@ -234,9 +248,7 @@ function renderizarRelatorios() {
   const listaReposicao = document.getElementById("listaReposicao");
   const resumoOperacional = document.getElementById("resumoOperacional");
 
-  if (!total) {
-    return;
-  }
+  if (!total) return;
 
   const totalNormais = produtos.filter((produto) => obterStatus(produto) === "normal").length;
   const totalAlertas = produtos.filter((produto) => obterStatus(produto) === "alerta").length;
@@ -273,9 +285,54 @@ function renderizarRelatorios() {
     resumoOperacional.innerHTML = `
       <p>O estoque possui <strong>${produtos.length}</strong> produtos cadastrados e <strong>${itens}</strong> unidades armazenadas no total.</p>
       <p><strong>${totalNormais}</strong> produtos estao em nivel normal, <strong>${totalAlertas}</strong> exigem atencao e <strong>${totalEmergencias}</strong> estao em situacao emergencial.</p>
-      <p>Use a pagina de movimentacoes para corrigir saldos rapidamente e a pagina de cadastro para ampliar a base de itens monitorados.</p>
+      <p>As requisicoes registram retiradas com responsavel e destino, melhorando o controle das saidas.</p>
     `;
   }
+}
+
+function renderizarFormularioRequisicao() {
+  const select = document.getElementById("produtoRequisicao");
+  if (!select) return;
+
+  if (produtos.length === 0) {
+    select.innerHTML = `<option value="">Nenhum produto cadastrado</option>`;
+    return;
+  }
+
+  select.innerHTML = `
+    <option value="">Selecione um produto</option>
+    ${produtos.map((produto, index) => `
+      <option value="${index}">
+        ${produto.codigo} - ${produto.nome} (${produto.quantidade} un)
+      </option>
+    `).join("")}
+  `;
+}
+
+function renderizarRequisicoes() {
+  const tabela = document.getElementById("listaRequisicoes");
+  const contador = document.getElementById("contadorRequisicoes");
+
+  if (!tabela) return;
+
+  if (contador) {
+    contador.textContent = `${requisicoes.length} registros`;
+  }
+
+  if (requisicoes.length === 0) {
+    tabela.innerHTML = `<tr><td colspan="5" class="lista-vazia">Nenhuma requisicao registrada.</td></tr>`;
+    return;
+  }
+
+  tabela.innerHTML = requisicoes.map((item) => `
+    <tr>
+      <td>${item.data}</td>
+      <td>${item.responsavel}</td>
+      <td>${item.codigo} - ${item.produto}</td>
+      <td>${item.quantidade}</td>
+      <td>${item.setor}</td>
+    </tr>
+  `).join("");
 }
 
 function entrada(index) {
@@ -303,13 +360,20 @@ function renderizarTudo() {
   renderizarEstoque();
   renderizarMovimentacoes();
   renderizarRelatorios();
+  renderizarFormularioRequisicao();
+  renderizarRequisicoes();
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  const formulario = document.getElementById("formCadastro");
+  const formularioCadastro = document.getElementById("formCadastro");
+  const formularioRequisicao = document.getElementById("formRequisicao");
 
-  if (formulario) {
-    formulario.addEventListener("submit", adicionarProduto);
+  if (formularioCadastro) {
+    formularioCadastro.addEventListener("submit", adicionarProduto);
+  }
+
+  if (formularioRequisicao) {
+    formularioRequisicao.addEventListener("submit", registrarRequisicao);
   }
 
   renderizarTudo();

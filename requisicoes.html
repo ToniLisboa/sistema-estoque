@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Requisicoes | Sistema de Estoque</title>
+<link rel="stylesheet" href="estilo/style.css">
+</head>
+<body>
+<header class="topo">
+<div class="topo-conteudo">
+<div>
+<p class="etiqueta">Saida controlada</p>
+<h1>Requisicoes de estoque</h1>
+<p class="subtitulo">Registre retiradas com responsavel, produto e quantidade solicitada.</p>
+</div>
+<nav class="menu">
+<a class="menu-link" href="index.html">Painel</a>
+<a class="menu-link" href="cadastro.html">Cadastro</a>
+<a class="menu-link" href="estoque.html">Estoque</a>
+<a class="menu-link" href="movimentacoes.html">Movimentacoes</a>
+<a class="menu-link ativo" href="requisicoes.html">Requisicoes</a>
+<a class="menu-link" href="relatorios.html">Relatorios</a>
+</nav>
+</div>
+</header>
+
+<main class="layout">
+<section class="card formulario-card">
+<div class="secao-topo">
+<h2>Nova requisicao</h2>
+<span class="contador">Preencha os dados da retirada</span>
+</div>
+
+<form id="formRequisicao" class="form-grid">
+<input type="text" id="responsavel" placeholder="Responsavel pela retirada" required>
+<select id="produtoRequisicao" required></select>
+<input type="number" id="quantidadeRequisicao" placeholder="Quantidade" min="1" required>
+<input type="text" id="setorRequisicao" placeholder="Setor / destino" required>
+<button type="submit">Registrar requisicao</button>
+</form>
+
+<p id="mensagemRequisicao" class="mensagem" aria-live="polite"></p>
+</section>
+
+<section class="card">
+<div class="secao-topo">
+<h2>Historico de requisicoes</h2>
+<span class="contador" id="contadorRequisicoes">0 registros</span>
+</div>
+
+<div class="tabela-wrap">
+<table>
+<thead>
+<tr>
+<th>Data</th>
+<th>Responsavel</th>
+<th>Produto</th>
+<th>Quantidade</th>
+<th>Setor</th>
+</tr>
+</thead>
+<tbody id="listaRequisicoes"></tbody>
+</table>
+</div>
+</section>
+</main>
+
+<script src="script.js"></script>
+</body>
+</html>
